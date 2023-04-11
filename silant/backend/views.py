@@ -8,44 +8,29 @@ from .serializers import MachineSerializerAll, MachineSerializerAny
 
 
 @api_view(['GET'])
-def get(request):
+def index(request):
+
     if request.method == 'GET':
         try:
             data = Machine.objects.all()
-        except:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-        serializers = MachineSerializerAll(data, many=True)
-        print(request.user)
-        return (Response({'data': serializers.data}, status=status.HTTP_200_OK))
-
-
-@api_view(['GET'])
-def index(request):
-
-    context = {}
-    context_json = ''
-
-    if request.method == 'GET':
-        try:
-            if not request.user.is_authenticated:
-                context = Machine.objects.all().values('modelMachine', 'factoryNumberMachine',
-                                                       'engine', 'factoryNumberEngine', 'transmission',
-                                                       'factoryNumberTransmission', 'driveAxel',
-                                                       'factoryNumberDriveAxel', 'steringAxel', 'factoryNumberSteringAxel')
-                context_json = MachineSerializerAny(context, many=True)
-
+            if request.user.is_authenticated:
+                
+                data_json = MachineSerializerAll(data, many=True)
             else:
-                context = Machine.objects.all().values()
-                context_json = MachineSerializerAll(context, many=True)
+                
+                data_json = MachineSerializerAny(data, many=True)
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
+        print('-----')
+        print(data_json.data)
+        print('-----')
         # Model._meta.get_field('<field name>').verbose_name
-
-    keys = context[0].keys()
-    ls = [item for item in keys]
-
+    
+        
+    ls = [item for item in data_json.data[0].keys()]
+  
     verboseNames = [Machine._meta.get_field(
         f'{name}').verbose_name for name in ls]
-
-    return Response({'context': context_json, 'verboseNames': verboseNames},status=status.HTTP_200_OK)
+    
+    return Response({'context': data_json.data, 'verboseNames': verboseNames}, status=status.HTTP_200_OK)

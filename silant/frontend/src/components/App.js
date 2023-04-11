@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { render } from "react-dom";
-
+import Search from './UI/Search';
 
 
 function App() {
@@ -8,8 +8,10 @@ function App() {
   const [dataJoined, setDataJoined] = useState('')
   const [error, setError] = useState()
 
+  const [value, setValue] = useState()
+
   useEffect(() => {
-    fetch('/api/get/')
+    fetch('api/index/')
       .then(response => {
         if (response.ok) {
           return response.json()
@@ -28,7 +30,7 @@ function App() {
 
   return (
     <div className="App">
-      
+      <Search />
     </div>
   );
 
