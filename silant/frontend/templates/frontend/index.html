@@ -2,10 +2,7 @@
 <html lang="en">
 
 <head>
- 
-  <link href=# rel="stylesheet" />
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Silant</title>
 </head>
 
@@ -32,11 +29,9 @@
   </nav>
 
   
-  <div id="app">
-   
-  </div>
-
+  <div id="app"></div>
+  {% load static %}
+  <script src="{% static 'frontend/main.js' %}"></script>
 </body>
-{% load static %}
-<script src="{% static 'frontend/main.js' %}"></script>
+
 </html>
