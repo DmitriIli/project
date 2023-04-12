@@ -24,7 +24,7 @@ def index(request):
 
         # Model._meta.get_field('<field name>').verbose_name
     
-        
+            
     ls = [item for item in data_json.data[0].keys()]
   
     verboseNames = [Machine._meta.get_field(
