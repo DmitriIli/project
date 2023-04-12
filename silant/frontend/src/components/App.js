@@ -14,11 +14,7 @@ export default function App() {
   }
 
   // const [machines, setMachines] = useState();
-
-  const data = fetchData()
-
-  console.log(data)
-
+  const [[value, setValue]] = useState();
   
   return (
     <div className="App" >
