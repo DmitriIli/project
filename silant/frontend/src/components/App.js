@@ -1,13 +1,30 @@
-import React, { Component, Fragment } from "react";
-import ReactDOM from "react-dom";
+import axios from "axios";
+import React, { Component, Fragment, useState } from "react";
+import { createRoot } from 'react-dom/client'
 import Header from "./layout/Header";
+import Search from "./layout/Search";
+import DataService from "./DataService";
+
 
 export default function App() {
+
+  async function fetchData(){
+    const data = await DataService.getAll();    
+    return data;
+  }
+
+  // const [machines, setMachines] = useState();
+
+  const data = fetchData()
+
+  console.log(data)
+
+  
   return (
-    <div>
-        <Header/>
+    <div className="App" >
+      <Search />
     </div>
   )
 }
 
-ReactDOM.render(<App />, document.getElementById("app"));
+createRoot(document.getElementById('app')).render(<App />)

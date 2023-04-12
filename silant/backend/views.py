@@ -22,9 +22,6 @@ def index(request):
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
-        print('-----')
-        print(data_json.data)
-        print('-----')
         # Model._meta.get_field('<field name>').verbose_name
     
         
