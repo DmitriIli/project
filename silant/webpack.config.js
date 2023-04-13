@@ -7,15 +7,29 @@ module.exports = {
         use: {
           loader: "babel-loader"
         }
-      }, 
+      },
       {
-        test: /\.jsx?$/, 
-        exclude: /(node_modules)/,  
+        test: /.jsx?/,
+        exclude: /(node_modules)/,
         use: {
-          loader: "babel-loader"
+          loader: "babel-loader",
         }
-      }
-
+      },
+      {
+        test: /\.css$/,
+        use: [
+          "style-loader",
+          {
+            loader: "css-loader",
+            options: {
+              modules: true
+            }
+          }
+        ]
+      },
     ]
+  },
+  resolve:{
+    extensions: [".js",".jsx"],
   }
 };
