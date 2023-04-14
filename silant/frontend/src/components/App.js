@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from "react-redux";
 import DataService from "./DataService"
-import Search from "./layout/Search";
-import Table from "./layout/Table";
+import Search from "./Search";
+import Table from "./Table";
 
 export default function App() {
 
