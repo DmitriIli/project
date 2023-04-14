@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import DataService from "./DataService"
 import Search from "./Search";
 import Table from "./Table";
+import Header from './Header';
 
 export default function App() {
 
@@ -14,11 +15,15 @@ export default function App() {
     dispatch({ type: "GETMACHINES", payload: responce })
   }
 
- 
+  useEffect(() => {
+    fetchData()
+  }, [])
+
+
   return (
     <div className="App" >
       <Search />
-      <button className='button' onClick={fetchData}>get data</button>
+      <Header data={machines} />
       <Table data={machines} />
     </div>
   )

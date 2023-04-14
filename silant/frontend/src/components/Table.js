@@ -7,24 +7,29 @@ export default function Table(props) {
     <div>
       {props.data[0]
         ?
-        <table>
-          <thead>
-            <tr key='head'>
-              {props.data[0].verboseNames.map(item => {
-                return <th className='th' key={item}>{item}</th>
-              })}
-            </tr>
-          </thead>
-          <tbody>
-            {props.data[0].context.map(item => {
-              return <tr key={item.factoryNumberMachine}>
-                <td>{item.modelMachine}</td>
-                <td>{item.factoryNumberMachine}</td>
-                <td>{item.engine}</td>
+        <div>
+
+          <table>
+            <thead>
+              <tr key='head'>
+                {props.data[0].verboseNames.map(item => {
+                  return <th className='th' key={item}>{item}</th>
+                })}
               </tr>
-            })}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {props.data[0].context.map(item => {
+                return <tr key={item.factoryNumberMachine}>
+                  {
+                    Object.keys(props.data[0].context[0]).map(name => {
+                      return <td key={name+item[name]}>{item[name]}</td>
+                    })
+                  }
+                </tr>
+              })}
+            </tbody>
+          </table>
+        </div>
         :
         <div> Данные не загружены </div>
       }
