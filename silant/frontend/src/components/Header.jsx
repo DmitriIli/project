@@ -6,8 +6,8 @@ export default function Header(props) {
     <div>
       {props.data[0]
         ?
-        <div>{props.data[0].verboseNames.map(item => {
-          return <div>{item}</div>
+        <div className="table__row--header">{props.data[0].verboseNames.map(item => {
+          return <div key={item}>{item}</div>
         })}</div>
         :
         <div> Данные не загружены </div>

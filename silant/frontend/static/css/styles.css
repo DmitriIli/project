@@ -8,7 +8,8 @@
     display: flex;
     justify-content: center;
 }
-.body{
+
+.body {
     width: 1200px;
     padding-top: 10px;
     display: flexbox;
@@ -31,7 +32,7 @@
     margin-top: 10px;
     justify-content: center;
     align-items: center;
-    
+
 }
 
 .header_top {
@@ -39,10 +40,10 @@
     padding-top: 10px;
     display: flex;
     justify-content: space-between;
-    align-items:center;
+    align-items: center;
 }
 
-.header_top_item{
+.header_top_item {
     padding-left: 20px;
     padding-right: 20px;
 }
@@ -62,6 +63,3 @@
     align-items: center;
 }
 
-.input {
-    width: 50%;
-}

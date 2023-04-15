@@ -23,7 +23,6 @@ export default function App() {
   return (
     <div className="App" >
       <Search />
-      <Header data={machines} />
       <Table data={machines} />
     </div>
   )
