@@ -1,10 +1,9 @@
 import React from 'react'
 
-export default function Search() {
+export default function Search(props) {
+
+
     return (
-        <div className='search'>
-            <input className='input' type='text' placeholder='Заводской номер'/>
-            <button className='buttonSubmit'>Поиск</button>
-        </div>
+        <input className='search-input' {...props} />
     );
 }

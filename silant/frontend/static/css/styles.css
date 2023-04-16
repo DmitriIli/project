@@ -1,31 +1,32 @@
+@font-face {
+    font-family: PT Astra Sans;
+    src: url(/silant/frontend/static/fonts/PTAstraSans/PT-Astra-Sans_Regular.ttf);
+}
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: PT Astra Sans;
 }
-
-#root {
-    display: flex;
-    justify-content: center;
-}
-
 .body {
-    width: 1200px;
-    padding-top: 10px;
-    display: flexbox;
-    justify-content: center;
-    align-items: center;
+    background-color: #EBE6D6;
 }
 
-.App {
+.content {
+
+    background-color: #EBE6D6;
     width: 1200px;
+    margin-top: 50px;
+    margin-left: auto;
+    margin-right: auto;
     padding-top: 10px;
-    display: flexbox;
     justify-content: center;
     align-items: center;
+   
+
 }
 
-.header {
+.page-header {
     display: grid;
     padding: 10px;
     width: 100%;
@@ -35,7 +36,7 @@
 
 }
 
-.header_top {
+.page-header-top {
     width: 100%;
     padding-top: 10px;
     display: flex;
@@ -43,23 +44,50 @@
     align-items: center;
 }
 
-.header_top_item {
+.page-header-top-item {
     padding-left: 20px;
     padding-right: 20px;
+    height: 30%;
+   
 }
 
-.header_bottom {
-    padding-top: 20px;
-    display: flex;
-    justify-content: center;
-}
 
-.search {
-    display: flex;
-    padding: 10px;
+.page-header-bottom {
     width: 100%;
-    margin-top: 10px;
+    padding-top: 10px;
+    display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.search-sorted-block{
+    width: 100%;
+    padding-top: 10px;
+   
+}
+
+
+.machines-list {
+    display: flex;
+    margin: 0 1%;
+}
+
+.rows-header {
+    margin-right: 1%;
+
+}
+
+.rows-context {
+    margin-left: 1%;
+    margin-right: 1%;
+    display: flex;
+
+}
+
+.rows-item {
+    width: 250px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 

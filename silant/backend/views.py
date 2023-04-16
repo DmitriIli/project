@@ -31,3 +31,4 @@ def index(request):
         f'{name}').verbose_name for name in ls]
     
     return Response({'context': data_json.data, 'verboseNames': verboseNames}, status=status.HTTP_200_OK)
+
