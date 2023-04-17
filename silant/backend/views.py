@@ -6,6 +6,16 @@ from .serializers import MachineSerializerAll, MachineSerializerAny
 
 # Create your views here.
 
+def getgetmachineslist(request):
+    if request.user.is_authenticated:
+        data = Machine.objects.all()
+    else:
+        data = Machine.objects.all().values()
+    
+    return None
+
+
+
 
 @api_view(['GET'])
 def index(request):
