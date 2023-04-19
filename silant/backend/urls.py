@@ -3,6 +3,6 @@ from . import views
 
 urlpatterns = [
     path('api/index/', views.index),
-    path('getmachineslist/', view.getmachineslist),
+    path('', views.getlist),
     
 ]

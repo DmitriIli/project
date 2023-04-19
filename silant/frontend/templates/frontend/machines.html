@@ -1,0 +1,15 @@
+{% extends 'frontend/default.html' %}
+
+{% block content %}
+<hr>
+{% if data %}
+<div class="table">
+
+{% for item in titles %}
+    <div class="title">{{item}}</div>
+{% endfor%}
+
+</div>
+{% endif%}
+
+{% endblock content %}

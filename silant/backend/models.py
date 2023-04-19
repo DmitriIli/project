@@ -23,6 +23,7 @@ class ClientUser(models.Model):
 
 class ManagerUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+  
 
 
 class Parts(models.Model):
@@ -163,44 +164,52 @@ class Machine(models.Model):
         ClientCompany, to_field='name', on_delete=models.CASCADE, verbose_name='Компания-клиент')
     serviceCompany = models.ForeignKey(
         ServiceCompany, to_field='name', on_delete=models.CASCADE, verbose_name='Сервисная компания')
-    
+
     class Meta:
         ordering = ['shipingDate']
+
 
 class Service(models.Model):
     typeOfService = models.ForeignKey(
         TypeOfService, to_field='name', on_delete=models.CASCADE, verbose_name='Type of Service')
     dateService = models.DateField(auto_now_add=True, verbose_name='Data')
-    operatingTime = models.IntegerField(default=0, verbose_name='Operating Time')
-    orderNumber = models.CharField(max_length=64, verbose_name='Order\'s Number')
-    orderDate = models.DateField(auto_now_add=True, verbose_name='Order\'s Data')
+    operatingTime = models.IntegerField(
+        default=0, verbose_name='Operating Time')
+    orderNumber = models.CharField(
+        max_length=64, verbose_name='Order\'s Number')
+    orderDate = models.DateField(
+        auto_now_add=True, verbose_name='Order\'s Data')
     serviceCompany = models.ForeignKey(
         ServiceCompany, to_field='name', on_delete=models.CASCADE, verbose_name='Service Company')
     machine = models.ForeignKey(
         Machine, to_field='factoryNumberMachine', on_delete=models.CASCADE, verbose_name='Machines')
-    
+
     class Meta:
         ordering = ['dateService']
-
 
 
 class Complainte(models.Model):
     machine = models.ForeignKey(
         Machine, to_field='factoryNumberMachine', on_delete=models.CASCADE, verbose_name='Machines')
-    failureDate = models.DateField(auto_now_add=True, verbose_name='Failure Data')
-    operatingTime = models.IntegerField(default=0, verbose_name='Operating Time')
+    failureDate = models.DateField(
+        auto_now_add=True, verbose_name='Failure Data')
+    operatingTime = models.IntegerField(
+        default=0, verbose_name='Operating Time')
     failurePart = models.ForeignKey(
         Parts, to_field='name', on_delete=models.CASCADE, verbose_name='Failure part')
-    failureDescription = models.CharField(max_length=256, default='описание', verbose_name='Descripton')
+    failureDescription = models.CharField(
+        max_length=256, default='описание', verbose_name='Descripton')
     recoveryMethod = models.ForeignKey(
         RecoveryMethod, to_field='name', on_delete=models.CASCADE, verbose_name='Recovery Method')
-    spareParts = models.CharField(default='зап.части', max_length=256 , verbose_name='Spare Parts')
-    recoveryDate = models.DateField(auto_now_add=True, verbose_name='recovery Date')
+    spareParts = models.CharField(
+        default='зап.части', max_length=256, verbose_name='Spare Parts')
+    recoveryDate = models.DateField(
+        auto_now_add=True, verbose_name='recovery Date')
     downTime = models.IntegerField(default=0, verbose_name='Down Time')
     serviceCompany = models.ForeignKey(
         ServiceCompany, to_field='name', on_delete=models.CASCADE, verbose_name='Servce Company')
     maintenanceCompany = models.ForeignKey(
         MaintenanceCompany, to_field='name', on_delete=models.CASCADE, verbose_name='Maintenance Company')
-    
+
     class Meta:
         ordering = ['downTime']
