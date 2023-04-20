@@ -1,7 +1,24 @@
-.table{
+.table-title{
     display:flex;
     
 }
-.title{
-    margin: 5px;
+.table-rows{
+    display:flex;
+    flex-flow: column wrap;
+   
+}
+.row{
+    display:flex;
+}
+.rows-item{
+    width: 250px;
+    
+}
+
+
+.rows-1item{
+    width: 250px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }

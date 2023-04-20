@@ -4,10 +4,21 @@
 <hr>
 {% if data %}
 <div class="table">
+    <div class="table-title">
+        {% for title in titles %}
+            <div class="rows-item">{{title}}</div>
+        {% endfor%}
+    </div>
+    <div class="table-rows">
+    {% for item in data %}
+        <div class="row">
+            {% for i in item %}
+            <div class="rows-item">{{i}} </div>
+            {% endfor%}
+        </div>
+    {% endfor%}
+    </div>
 
-{% for item in titles %}
-    <div class="title">{{item}}</div>
-{% endfor%}
 
 </div>
 {% endif%}
