@@ -1,26 +1,30 @@
 {% extends 'frontend/default.html' %}
 
 {% block content %}
+<form method="get" class="form-search">
+    {{ filter.form.as_p }}
+    <input type="submit" />
+</form>
 <hr>
-{% if data %}
+{% if filter.qs %}
 <div class="table">
     <div class="table-title">
         {% for title in titles %}
-            <div class="rows-item">{{title}}</div>
+        <div class="rows-item">{{title}}</div>
         {% endfor%}
     </div>
     <div class="table-rows">
-    {% for item in data %}
+        {% for item in filter.qs %}
         <div class="row">
-            {% for i in item %}
-            <div class="rows-item">{{i}} </div>
+            {% for value in item.values %}
+            <div class="rows-item"> {{value}} </div>
             {% endfor%}
         </div>
-    {% endfor%}
+        {% endfor %}
     </div>
-
-
 </div>
+{% else %}
+<h1>данные не обнаружены</h1>
 {% endif%}
 
 {% endblock content %}

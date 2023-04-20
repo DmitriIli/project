@@ -4,6 +4,7 @@ from rest_framework.decorators import api_view
 from rest_framework import status
 from .models import Machine
 from .serializers import MachineSerializerAll, MachineSerializerAny
+from .filters import MachinesFilter
 
 # Create your views here.
 
@@ -13,19 +14,19 @@ def getlist(request):
     user = request.user
 
     if not user.is_authenticated:
-        data = list(Machine.objects.all().values('modelMachine', 'factoryNumberMachine', 'engine', 'factoryNumberEngine', 'transmission',
-                                                 'factoryNumberTransmission', 'driveAxel', 'factoryNumberDriveAxel', 'steringAxel', 'factoryNumberSteringAxel'))
+        data = Machine.objects.all().values('modelMachine', 'factoryNumberMachine', 'engine', 'factoryNumberEngine', 'transmission',
+                                            'factoryNumberTransmission', 'driveAxel', 'factoryNumberDriveAxel', 'steringAxel', 'factoryNumberSteringAxel')
         print('not user')
     elif user.groups.filter(name='Client').count():
-        data = list(Machine.objects.filter(
-            client__clientuser__user=user).values())
+        data = Machine.objects.filter(
+            client__clientuser__user=user).values()
 
     elif user.groups.filter(name='ServiceCompany').count():
-        data = list(Machine.objects.filter(
-            serviceCompany__servicecompanyuser__user=user).values())
+        data = Machine.objects.filter(
+            serviceCompany__servicecompanyuser__user=user).values()
 
     elif user.groups.filter(name='Manager').count():
-        data = list(Machine.objects.all().values())
+        data = Machine.objects.all().values()
 
     else:
         print(f'root')
@@ -35,7 +36,9 @@ def getlist(request):
     titles = [Machine._meta.get_field(
         f'{name}').verbose_name for name in ls]
 
-    context = {'data': data, 'titles': titles}
+    f = MachinesFilter(request.GET, queryset=data)
+
+    context = {'data': data, 'titles': titles, 'filter': f}
 
     return render(request, template_name='frontend/machines.html', context=context)
 

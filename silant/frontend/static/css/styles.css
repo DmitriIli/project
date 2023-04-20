@@ -22,8 +22,6 @@
     padding-top: 10px;
     justify-content: center;
     align-items: center;
-   
-
 }
 
 .page-header {
@@ -33,7 +31,6 @@
     margin-top: 10px;
     justify-content: center;
     align-items: center;
-
 }
 
 .page-header-top {
@@ -47,8 +44,7 @@
 .page-header-top-item {
     padding-left: 20px;
     padding-right: 20px;
-    height: 30%;
-   
+    height: 30%; 
 }
 
 
@@ -63,7 +59,6 @@
 .search-sorted-block{
     width: 100%;
     padding-top: 10px;
-   
 }
 
 
@@ -74,14 +69,12 @@
 
 .rows-header {
     margin-right: 1%;
-
 }
 
 .rows-context {
     margin-left: 1%;
     margin-right: 1%;
     display: flex;
-
 }
 
 .rows-item {

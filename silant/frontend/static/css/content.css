@@ -1,21 +1,24 @@
+
+
+.form-search{
+    display: inline;
+}
 .table-title{
     display:flex;
-    
 }
 .table-rows{
-    display:flex;
     flex-flow: column wrap;
-   
 }
 .row{
     display:flex;
 }
 .rows-item{
     width: 250px;
-    
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 5px;
 }
-
-
 .rows-1item{
     width: 250px;
     white-space: nowrap;
