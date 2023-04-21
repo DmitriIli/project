@@ -4,7 +4,7 @@ from rest_framework.decorators import api_view
 from rest_framework import status
 from .models import *
 from .serializers import MachineSerializerAll, MachineSerializerAny
-from .filters import MachinesFilter, ServiceFilter
+from .filters import MachinesFilter, ServiceFilter, MaintFilter
 
 # Create your views here.
 
@@ -44,49 +44,39 @@ def getlist(request):
 
 
 def machine(request, item):
-    context, data, titles = {}, [], []
+    context, data, titles, titlesCompl = {}, [], [], []
     data = Service.objects.filter(machine=item).values()
     ls = [item for item in data[0].keys()]
     titles = [Service._meta.get_field(
         f'{name}').verbose_name for name in ls]
-    f = ServiceFilter(request.GET, queryset=data)
-    context = {'data': data, 'titles': titles, 'filter': f}
+    fService = ServiceFilter(request.GET, queryset=data)
+
+    maint = Complainte.objects.filter(machine=item).values()
+    print(maint)
+    lsd = [item for item in maint[0].keys()]
+    titlesC = [Complainte._meta.get_field(
+        f'{name}').verbose_name for name in lsd]
+
+    fMaint = MaintFilter(request.GET, queryset=maint)
+    context = {'data': data, 'titles': titles, 'filterService': fService,
+               'maint': maint, 'titlesC': titlesC, 'filterMaint': fMaint}
     return render(request, template_name='frontend/machine_detail.html', context=context)
 
 
 def catalog(request, param):
     context, data, titles = {}, [], []
     ls = param.split('&')
-    match ls[0]:
-        case "engine":
-            data = Engine.objects.filter(name=ls[1]).values()
-        case _:
-            data = []
-    
-    print(data)
-    return render(request, template_name='frontend/catalog.html')
-
-
-@api_view(['GET'])
-def index(request):
-
-    if request.method == 'GET':
-        try:
-            data = Machine.objects.all()
-            if request.user.is_authenticated:
-
-                data_json = MachineSerializerAll(data, many=True)
-            else:
-
-                data_json = MachineSerializerAny(data, many=True)
-        except:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-
-        # Model._meta.get_field('<field name>').verbose_name
-
-    ls = [item for item in data_json.data[0].keys()]
-
-    verboseNames = [Machine._meta.get_field(
-        f'{name}').verbose_name for name in ls]
-
-    return Response({'context': data_json.data, 'verboseNames': verboseNames}, status=status.HTTP_200_OK)
+    if ls[0] == "engine":
+        data = Engine.objects.filter(name=ls[1]).values()
+    if ls[0] == "transmission":
+        data = Transmission.objects.filter(name=ls[1]).values()
+    if ls[0] == "driveAxel":
+        data = DriveAxel.objects.filter(name=ls[1]).values()
+    if ls[0] == "steringAxel":
+        data = SteringAxel.objects.filter(name=ls[1]).values()
+    if ls[0] == "serviceCompany":
+        data = ServiceCompany.objects.filter(name=ls[1]).values()
+    if ls[0] == "typeOfService":
+        data = TypeOfService.objects.filter(name=ls[1]).values()
+    context = {'data': list(data)}
+    return render(request, template_name='frontend/catalog.html', context=context)

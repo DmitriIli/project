@@ -2,36 +2,77 @@
 {% load custom_filters %}
 
 {% block content %}
-
+<hr>
+<h2>Техническое обслуживание</h2>
+<hr>
 <form method="get" class="form-search">
-    {{ filter.form.as_p }}
+    {{ filterService.form.as_p }}
     <input type="submit" />
 </form>
-<hr>
-{% if filter.qs %}
-    <div class="table">
-        <div class="table-title">
-            {% for title in titles %}
-            <div class="rows-titleitem">{{title}}</div>
-            {% endfor%}
-        </div>
-        <div class="table-rows">    
-            {% for item in filter.qs %}
-                <div class="row">
-                    <div class="rows-item">{{item.id}}</div>
-                    <div class="rows-item"><a class="nav-item" href=#>{{item.typeOfService_id}}</a></div>
-                    <div class="rows-item">{{item.dateService}}</div>
-                    <div class="rows-item">{{item.operatingTime}}</div>
-                    <div class="rows-item">{{item.orderNumber}}</div>
-                    <div class="rows-item">{{item.orderDate}}</div>
-                    <div class="rows-item">{{item.serviceCompany_id}}</div>
-                    <div class="rows-item">{{item.machine_id}}</div>  
-                </div>
-            {% endfor %}    
-        </div>
-    </div>
-{% else %}
-    <h1>Данные о ТО не обнаружены</h1>
-{% endif %}
 
+{% if filterService.qs %}
+<div class="table">
+    <div class="table-title">
+        {% for title in titles %}
+        <div class="rows-titleitem">{{title}}</div>
+        {% endfor%}
+    </div>
+    <div class="table-rows">
+        {% for item in filterService.qs %}
+        <div class="row">
+            <div class="rows-item">{{item.id}}</div>
+            <div class="rows-item"><a class="nav-item"
+                    href="/catalog/typeOfService&{{item.typeOfService_id}}">{{item.typeOfService_id}}</a></div>
+            <div class="rows-item">{{item.dateService}}</div>
+            <div class="rows-item">{{item.operatingTime}}</div>
+            <div class="rows-item">{{item.orderNumber}}</div>
+            <div class="rows-item">{{item.orderDate}}</div>
+            <div class="rows-item"><a class="nav-item"
+                    href="/catalog/serviceCompany&{{item.serviceCompany_id}}">{{item.serviceCompany_id}}</a></div>
+            <div class="rows-item">{{item.machine_id}}</div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% else %}
+<h3>Данные по ТО не обнаружены</h3>
+{% endif %}
+<hr>
+<h2>Рекламации</h2>
+<hr>
+<form method="get" class="form-search">
+    {{ filterMaint.form.as_p }}
+    <input type="submit" />
+</form>
+
+{% if filterMaint.qs %}
+<div class="table">
+    <div class="table-title">
+        {% for title in titlesC %}
+        <div class="rows-titleitem">{{title}}</div>
+        {% endfor%}
+    </div>
+    <div class="table-rows">
+        {% for item in filterMaint.qs %}
+        <div class="row">
+            <div class="rows-item">{{item.id}}</div>
+            <div class="rows-item">{{item.machine_id}}</div>
+            <div class="rows-item">{{item.failureDate}}</div>
+            <div class="rows-item">{{item.operatingTime}}</div>
+            <div class="rows-item">{{item.failurePart_id}}</div>
+            <div class="rows-item">{{item.failureDescription}}</div>
+            <div class="rows-item">{{item.recoveryMethod_id}}</div>
+            <div class="rows-item">{{item.spareParts}}</div>
+            <div class="rows-item">{{item.recoveryDate}}</div>
+            <div class="rows-item">{{item.downTime}}</div>
+            <div class="rows-item">{{item.serviceCompany_id}}</div>
+            <div class="rows-item">{{item.maintenanceCompany_id}}</div>            
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% else %}
+<h3>Данные по рекламациям не обнаружены</h3>
+{% endif %}
+<hr>
 {% endblock content %}

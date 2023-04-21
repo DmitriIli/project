@@ -1,6 +1,6 @@
-from django.db import models
-from datetime import date
+from datetime import date, datetime
 from django.contrib.auth.models import User
+from django.db import models
 
 # Create your models here.
 
@@ -193,7 +193,7 @@ class Complainte(models.Model):
     machine = models.ForeignKey(
         Machine, to_field='factoryNumberMachine', on_delete=models.CASCADE, verbose_name='Машина')
     failureDate = models.DateField(
-        auto_now_add=True, verbose_name='Дата отказа')
+        default=date.today(), verbose_name='Дата отказа')
     operatingTime = models.IntegerField(
         default=0, verbose_name='Наработка')
     failurePart = models.ForeignKey(
@@ -205,7 +205,7 @@ class Complainte(models.Model):
     spareParts = models.CharField(
         default='зап.части', max_length=256, verbose_name='Запасные части')
     recoveryDate = models.DateField(
-        auto_now_add=True, verbose_name='Дата восстановления')
+        default=date.today(), verbose_name='Дата восстановления')
     downTime = models.IntegerField(default=0, verbose_name='Время простоя')
     serviceCompany = models.ForeignKey(
         ServiceCompany, to_field='name', on_delete=models.CASCADE, verbose_name='Сервисная компания')
@@ -214,3 +214,11 @@ class Complainte(models.Model):
 
     class Meta:
         ordering = ['downTime']
+
+    def save(self, *args, **kwargs):
+         data_end = self.recoveryDate
+         data_start = self.failureDate
+         d1 = datetime.strptime(str(data_end), "%Y-%m-%d")
+         d2 = datetime.strptime(str(data_start), "%Y-%m-%d") 
+         self.downTime = abs((d2 - d1).days)
+         super(Complainte, self).save(*args, **kwargs)

@@ -29,3 +29,13 @@ class ServiceFilter(FilterSet):
     class Meta:
         model = Machine
         fields = ['typeOfService__name','machine__factoryNumberMachine','serviceCompany__name',]
+
+class MaintFilter(FilterSet):
+    failurePart__name = django_filters.CharFilter(label='Узел отказа', lookup_expr='icontains')
+    recoveryMethod__name = django_filters.CharFilter(label='Способ восстановления', lookup_expr='icontains')
+    serviceCompany__name = django_filters.CharFilter(label='Сервисная компания', lookup_expr='icontains')
+    
+   
+    class Meta:
+        model = Machine
+        fields = ['failurePart__name','recoveryMethod__name','serviceCompany__name',]

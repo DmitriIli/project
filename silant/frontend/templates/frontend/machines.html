@@ -24,11 +24,11 @@
             <div class="rows-item">{{item.factoryNumberMachine}}</div>
             <div class="rows-item"><a class="nav-item" href="catalog/engine&{{item.engine_id}}">{{item.engine_id}}</a></div>
             <div class="rows-item">{{item.factoryNumberEngine}}</div>
-            <div class="rows-item"><a class="nav-item" href=#>{{item.transmission_id}}</a></div>
+            <div class="rows-item"><a class="nav-item" href="catalog/transmission&{{item.transmission_id}}">{{item.transmission_id}}</a></div>
             <div class="rows-item">{{item.factoryNumberTransmission}}</div>
-            <div class="rows-item"><a class="nav-item" href=#>{{item.driveAxel_id}}</a></div>
+            <div class="rows-item"><a class="nav-item" href="catalog/driveAxel&{{item.driveAxel_id}}">{{item.driveAxel_id}}</a></div>
             <div class="rows-item">{{item.factoryNumberDriveAxel}}</div>
-            <div class="rows-item"><a class="nav-item" href=#>{{item.steringAxel_id}}</a></div>
+            <div class="rows-item"><a class="nav-item" href="catalog/steringAxel&{{item.steringAxel_id}}">{{item.steringAxel_id}}</a></div>
             <div class="rows-item">{{item.factoryNumberSteringAxel}}</div>
             <div class="rows-item">{{item.supplyContract}}</div>
             <div class="rows-item">{{item.shipingDate}}</div>
@@ -36,12 +36,12 @@
             <div class="rows-item">{{item.deliveryAddress}}</div>
             <div class="rows-item">{{item.equipment}}</div>
             <div class="rows-item">{{item.client_id}}</div>
-            <div class="rows-item"><a class="nav-item" href=#>{{item.serviceCompany_id}}</a></div>  
+            <div class="rows-item"><a class="nav-item" href="catalog/serviceCompany&{{item.serviceCompany_id}}">{{item.serviceCompany_id}}</a></div>  
         </div>
         {% else %}
     
         <div class="row">
-            <div class="rows-item"><a class="nav-item" href="{{item.modelMachine_id}}">{{item.modelMachine}}</a></div>
+            <div class="rows-item"><a class="nav-item" href=#>{{item.modelMachine}}</a></div>
             <div class="rows-item">{{item.factoryNumberMachine}}</div>
             <div class="rows-item"><a class="nav-item" href=#>{{item.engine}}</a></div>
             <div class="rows-item">{{item.factoryNumberEngine}}</div>

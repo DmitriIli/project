@@ -2,7 +2,11 @@
 {% load custom_filters %}
 
 {% block content %}
-
-<div>catalog</div>
+<div>
+    {% for item in data%}
+    <div>Имя: {{item.name}}</div>
+    <div>Описание: {{item.description}}</div>
+{% endfor %}
+</div>
 
 {% endblock content %}
