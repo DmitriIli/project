@@ -1,0 +1,37 @@
+{% extends 'frontend/default.html' %}
+{% load custom_filters %}
+
+{% block content %}
+
+<form method="get" class="form-search">
+    {{ filter.form.as_p }}
+    <input type="submit" />
+</form>
+<hr>
+{% if filter.qs %}
+    <div class="table">
+        <div class="table-title">
+            {% for title in titles %}
+            <div class="rows-titleitem">{{title}}</div>
+            {% endfor%}
+        </div>
+        <div class="table-rows">    
+            {% for item in filter.qs %}
+                <div class="row">
+                    <div class="rows-item">{{item.id}}</div>
+                    <div class="rows-item"><a class="nav-item" href=#>{{item.typeOfService_id}}</a></div>
+                    <div class="rows-item">{{item.dateService}}</div>
+                    <div class="rows-item">{{item.operatingTime}}</div>
+                    <div class="rows-item">{{item.orderNumber}}</div>
+                    <div class="rows-item">{{item.orderDate}}</div>
+                    <div class="rows-item">{{item.serviceCompany_id}}</div>
+                    <div class="rows-item">{{item.machine_id}}</div>  
+                </div>
+            {% endfor %}    
+        </div>
+    </div>
+{% else %}
+    <h1>Данные о ТО не обнаружены</h1>
+{% endif %}
+
+{% endblock content %}

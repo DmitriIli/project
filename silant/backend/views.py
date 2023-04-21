@@ -2,21 +2,21 @@ from django.shortcuts import render, redirect
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status
-from .models import Machine
+from .models import *
 from .serializers import MachineSerializerAll, MachineSerializerAny
-from .filters import MachinesFilter
+from .filters import MachinesFilter, ServiceFilter
 
 # Create your views here.
 
 
 def getlist(request):
-    context, data, titles = [], [], []
+    context, data, titles = {}, [], []
     user = request.user
 
     if not user.is_authenticated:
         data = Machine.objects.all().values('modelMachine', 'factoryNumberMachine', 'engine', 'factoryNumberEngine', 'transmission',
                                             'factoryNumberTransmission', 'driveAxel', 'factoryNumberDriveAxel', 'steringAxel', 'factoryNumberSteringAxel')
-        print('not user')
+
     elif user.groups.filter(name='Client').count():
         data = Machine.objects.filter(
             client__clientuser__user=user).values()
@@ -41,6 +41,30 @@ def getlist(request):
     context = {'data': data, 'titles': titles, 'filter': f}
 
     return render(request, template_name='frontend/machines.html', context=context)
+
+
+def machine(request, item):
+    context, data, titles = {}, [], []
+    data = Service.objects.filter(machine=item).values()
+    ls = [item for item in data[0].keys()]
+    titles = [Service._meta.get_field(
+        f'{name}').verbose_name for name in ls]
+    f = ServiceFilter(request.GET, queryset=data)
+    context = {'data': data, 'titles': titles, 'filter': f}
+    return render(request, template_name='frontend/machine_detail.html', context=context)
+
+
+def catalog(request, param):
+    context, data, titles = {}, [], []
+    ls = param.split('&')
+    match ls[0]:
+        case "engine":
+            data = Engine.objects.filter(name=ls[1]).values()
+        case _:
+            data = []
+    
+    print(data)
+    return render(request, template_name='frontend/catalog.html')
 
 
 @api_view(['GET'])

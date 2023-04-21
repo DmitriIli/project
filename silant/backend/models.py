@@ -178,7 +178,7 @@ class Service(models.Model):
     orderNumber = models.CharField(
         max_length=64, verbose_name='№ Заказ-наряд')
     orderDate = models.DateField(
-        auto_now_add=True, verbose_name='Дата заказ-наряда')
+        default=date.today(), verbose_name='Дата заказ-наряда')
     serviceCompany = models.ForeignKey(
         ServiceCompany, to_field='name', on_delete=models.CASCADE, verbose_name='Сервисная компания')
     machine = models.ForeignKey(

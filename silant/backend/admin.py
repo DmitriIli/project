@@ -64,8 +64,9 @@ class RecoveryMethodAdmin(admin.ModelAdmin):
 
 @admin.register(Machine)
 class MachineAdmin(admin.ModelAdmin):
-    # list_display = ('name','description',)
+    # list_display = ('__all__',)
     ...
+    
 
 
 @admin.register(Service)

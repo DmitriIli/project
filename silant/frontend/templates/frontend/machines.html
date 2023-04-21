@@ -1,30 +1,62 @@
 {% extends 'frontend/default.html' %}
+{% load custom_filters %}
 
 {% block content %}
+
 <form method="get" class="form-search">
     {{ filter.form.as_p }}
     <input type="submit" />
 </form>
 <hr>
-{% if filter.qs %}
-<div class="table">
-    <div class="table-title">
-        {% for title in titles %}
-        <div class="rows-item">{{title}}</div>
-        {% endfor%}
-    </div>
-    <div class="table-rows">
-        {% for item in filter.qs %}
-        <div class="row">
-            {% for value in item.values %}
-            <div class="rows-item"> {{value}} </div>
-            {% endfor%}
-        </div>
-        {% endfor %}
-    </div>
+
+<div class="table-title">
+    {% for title in titles %}
+    <div class="rows-titleitem">{{title}}</div>
+    {% endfor%}
 </div>
+{% if filter.qs %}
+    <div class="table-rows">
+    {% for item in filter.qs %}
+        {% if request.user.is_authenticated %}
+        
+        <div class="row">
+            <div class="rows-item"><a class="nav-item" href="service/{{item.factoryNumberMachine}}">{{item.modelMachine_id}}</a></div>
+            <div class="rows-item">{{item.factoryNumberMachine}}</div>
+            <div class="rows-item"><a class="nav-item" href="catalog/engine&{{item.engine_id}}">{{item.engine_id}}</a></div>
+            <div class="rows-item">{{item.factoryNumberEngine}}</div>
+            <div class="rows-item"><a class="nav-item" href=#>{{item.transmission_id}}</a></div>
+            <div class="rows-item">{{item.factoryNumberTransmission}}</div>
+            <div class="rows-item"><a class="nav-item" href=#>{{item.driveAxel_id}}</a></div>
+            <div class="rows-item">{{item.factoryNumberDriveAxel}}</div>
+            <div class="rows-item"><a class="nav-item" href=#>{{item.steringAxel_id}}</a></div>
+            <div class="rows-item">{{item.factoryNumberSteringAxel}}</div>
+            <div class="rows-item">{{item.supplyContract}}</div>
+            <div class="rows-item">{{item.shipingDate}}</div>
+            <div class="rows-item">{{item.receiver}}</div>
+            <div class="rows-item">{{item.deliveryAddress}}</div>
+            <div class="rows-item">{{item.equipment}}</div>
+            <div class="rows-item">{{item.client_id}}</div>
+            <div class="rows-item"><a class="nav-item" href=#>{{item.serviceCompany_id}}</a></div>  
+        </div>
+        {% else %}
+    
+        <div class="row">
+            <div class="rows-item"><a class="nav-item" href="{{item.modelMachine_id}}">{{item.modelMachine}}</a></div>
+            <div class="rows-item">{{item.factoryNumberMachine}}</div>
+            <div class="rows-item"><a class="nav-item" href=#>{{item.engine}}</a></div>
+            <div class="rows-item">{{item.factoryNumberEngine}}</div>
+            <div class="rows-item"><a class="nav-item" href=#>{{item.transmission}}</a></div>
+            <div class="rows-item">{{item.factoryNumberTransmission}}</div>
+            <div class="rows-item"><a class="nav-item" href=#>{{item.driveAxel}}</a></div>
+            <div class="rows-item">{{item.factoryNumberDriveAxel}}</div>
+            <div class="rows-item"><a class="nav-item" href=#>{{item.steringAxel}}</a></div>
+            <div class="rows-item">{{item.factoryNumberSteringAxel}}</div>
+        </div>
+        {% endif %}
+    {% endfor%}
+    </div>
 {% else %}
-<h1>данные не обнаружены</h1>
+    <h1>данные не обнаружены</h1>
 {% endif%}
 
 {% endblock content %}
