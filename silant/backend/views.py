@@ -1,10 +1,16 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
 from rest_framework import status
 from .models import *
 from .serializers import MachineSerializerAll, MachineSerializerAny
 from .filters import MachinesFilter, ServiceFilter, MaintFilter
+from rest_framework.request import Request
+from rest_framework.decorators import api_view, permission_classes, authentication_classes
+from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.authentication import TokenAuthentication, SessionAuthentication
+from backend.serializers import UserSerilazer, LoginRequestSerializer
+from rest_framework.authtoken.models import Token
+from django.contrib.auth import authenticate, login, logout
 
 # Create your views here.
 
@@ -80,3 +86,41 @@ def catalog(request, param):
         data = TypeOfService.objects.filter(name=ls[1]).values()
     context = {'data': list(data)}
     return render(request, template_name='frontend/catalog.html', context=context)
+
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def auth_login(request: Request):
+    serializer = LoginRequestSerializer(data=request.data)
+    if serializer.is_valid():
+        authenticated_user = authenticate(**serializer.validated_data)
+        if authenticated_user is not None:
+            login(request, authenticated_user)
+            return Response({'status': 'Success'})
+        else:
+            return Response({'error': 'Invalid credentials'}, status=403)
+    else:
+        return Response(serializer.errors, status=400)
+
+
+@api_view()
+@permission_classes([IsAuthenticated])
+@authentication_classes([SessionAuthentication])
+def user(request: Request):
+    return Response({
+        'data': UserSerilazer(request.user).data
+    })
+
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def auth_logout(request: Request):
+    logout(request)
+    return Response(status=200)
+
+# def logout(request):
+#     try:
+#         del request.session['user']
+#     except:
+#         return redirect('login')
+#     return redirect('login')
