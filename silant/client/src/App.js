@@ -11,14 +11,9 @@ function getCookie(name) {
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(true)
   const [loading, setLoading] = useState()
-  const [formUsername, setFormUsername] = useState()
-  const [formPassword, setFormPassword] = useState()
-  const [firstName, setFirstName] = useState('')
-  const [lastName, setLastName] = useState('')
-  const [username, setUsername] = useState('')
-  const [email, setEmail] = useState('')
-  const [dateJoined, setDateJoined] = useState('')
+  const [form, setForm] = useState({ userName: '', password: '' })
   const [error, setError] = useState()
+  const [data, setData] = useState({ firstName: '', lastName: '', userName: '', email: '', dateJoined: '' })
   const csrftoken = getCookie('csrftoken')
 
 
@@ -41,11 +36,7 @@ function App() {
           }
         })
         .then(({ data }) => {
-          setFirstName(data.first_name)
-          setLastName(data.last_name)
-          setUsername(data.username)
-          setEmail(data.email)
-          setDateJoined(data.date_joined)
+          setData({ firstName: data.first_name, lastName: data.last_name, userName: data.username, email: data.email, dateJoined: data.date_joined })
           setError(null)
         })
         .catch(error => {
@@ -68,8 +59,8 @@ function App() {
           'X-CSRFToken': csrftoken,
         },
         body: JSON.stringify({
-          username: formUsername,
-          password: formPassword
+          username: form.userName,
+          password: form.password,
         })
       }
     )
@@ -92,24 +83,24 @@ function App() {
       .finally(
         setLoading(false)
 
-        )
+      )
   }
 
   const logoutHandler = e => {
     e.preventDefault();
     fetch('api/logout/',
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json;charset=utf-8',
-        'X-CSRFToken': csrftoken,
-      },
-    }
-  )
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json;charset=utf-8',
+          'X-CSRFToken': csrftoken,
+        },
+      }
+    )
     setIsLoggedIn(false)
-    setFormUsername('')
-    setFormPassword('')
-    
+    setForm({ userName: '', password: '' })
+
+
   }
   return (
     <div className="App">
@@ -117,18 +108,18 @@ function App() {
       {!isLoggedIn ?
         loading ? "Загрузка..." :
           <form className="loginForm" onSubmit={submitHandler}>
-            <input type="text" name="username" value={formUsername} onChange={e => setFormUsername(e.target.value)} placeholder="Username" />
-            <input type="password" name="password" value={formPassword} onChange={e => setFormPassword(e.target.value)} placeholder="Password" />
+            <input type="text" name="username" value={form.userName} onChange={e => setForm({ ...form, userName: e.target.value })} placeholder="Username" />
+            <input type="password" name="password" value={form.password} onChange={e => setForm({ ...form, password: e.target.value })} placeholder="Password" />
             <input type="submit" name="submit" value="Войти" />
           </form>
         :
         !error ?
           <div className="Profile">
             <div>
-              <h1>{firstName} {lastName}</h1>
-              <h2>{username}</h2>
-              <p>email: {email}</p>
-              <p>Профиль создан {dateJoined}</p>
+              <h1>{data.firstName} {data.lastName}</h1>
+              <h2>{data.userName}</h2>
+              <p>email: {data.email}</p>
+              <p>Профиль создан {data.dateJoined}</p>
             </div>
             <div>
               <button className='button' onClick={logoutHandler}>LogOut</button>
