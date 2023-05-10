@@ -5,5 +5,6 @@ urlpatterns = [
     # path('api/index/', views.index),
     path('', views.getlist),
     path('service/<str:item>/', views.machine, name='machine'),
-    path('catalog/<str:param>/', views.catalog, name='catalog'),    
+    path('catalog/<str:param>/', views.catalog, name='catalog'),
+    path('api/get/', views.get_machines_list_by_users_group, name='get_machines'),
 ]

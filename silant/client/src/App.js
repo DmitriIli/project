@@ -8,6 +8,25 @@ function getCookie(name) {
   if (parts.length === 2) return parts.pop().split(';').shift();
 }
 
+const onload = e => {
+  e.preventDefault();
+  fetch('/api/get/',
+    {
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8',
+
+      },
+    }
+  ).then(response => {
+    if (response.ok) {
+      return response.data
+    } else {
+      throw Error(`Something went wrong: code ${response.status}`)
+    }
+  })
+
+}
+
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(true)
   const [loading, setLoading] = useState()
@@ -99,11 +118,12 @@ function App() {
     )
     setIsLoggedIn(false)
     setForm({ userName: '', password: '' })
-
-
   }
+
+
   return (
     <div className="App">
+      <button onClick={onload}>getUser</button>
       {error ? <p>{error}</p> : null}
       {!isLoggedIn ?
         loading ? "Загрузка..." :

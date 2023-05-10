@@ -7,11 +7,10 @@ from .filters import MachinesFilter, ServiceFilter, MaintFilter
 from rest_framework.request import Request
 from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from rest_framework.authentication import TokenAuthentication, SessionAuthentication
+from rest_framework.authentication import SessionAuthentication
 from backend.serializers import UserSerilazer, LoginRequestSerializer
-from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate, login, logout
-
+from .servises import get_machines_list_by_users_group
 # Create your views here.
 
 
@@ -107,20 +106,42 @@ def auth_login(request: Request):
 @permission_classes([IsAuthenticated])
 @authentication_classes([SessionAuthentication])
 def user(request: Request):
+
     return Response({
         'data': UserSerilazer(request.user).data
     })
 
 
 @api_view(['POST'])
-@permission_classes([AllowAny])
+@permission_classes([AllowAny, IsAuthenticated])
+@authentication_classes([SessionAuthentication])
 def auth_logout(request: Request):
     logout(request)
     return Response(status=200)
 
-# def logout(request):
-#     try:
-#         del request.session['user']
-#     except:
-#         return redirect('login')
-#     return redirect('login')
+
+@api_view()
+@permission_classes([AllowAny])
+@authentication_classes([SessionAuthentication])
+def get_user(request: Request):
+    data = {}
+    if request.user.is_authenticated:
+        data = {'status': 'authorizated'}
+
+    else:
+        data = {'status': 'dont\'t authorizated'}
+
+    return Response({
+        'data': data
+    })
+
+
+@api_view()
+@permission_classes([AllowAny])
+@authentication_classes([SessionAuthentication])
+def get_machines_by_users_group(request: Request):
+
+    data = get_machines_list_by_users_group(request.user)
+    return Response({
+        'data': data
+    })
