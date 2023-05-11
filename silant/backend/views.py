@@ -140,8 +140,8 @@ def get_user(request: Request):
 @permission_classes([AllowAny])
 @authentication_classes([SessionAuthentication])
 def get_machines_by_users_group(request: Request):
-
-    data = get_machines_list_by_users_group(request.user)
+    
+    responce = get_machines_list_by_users_group(request.user)
     return Response({
-        'data': data
+        'responce': responce
     })
