@@ -1,5 +1,5 @@
 from .models import Machine
-
+from django.contrib.auth.models import User
 
 def get_titles(data):
     """Получить заголовки таблицы"""
@@ -47,12 +47,21 @@ def get_machine_list_for_manager():
     return context
 
 
-def get_machines_list_by_users_group(user):
+def return_user(user=None):
+    if user:
+        print(User.objects.get(username=user).groups.values()[0]['name'])
+        return Machine.objects.all().values()
+    else:
+        print(user)
+        return Machine.objects.all().values('modelMachine', 'factoryNumberMachine', 'engine', 'factoryNumberEngine', 'transmission',
+                                            'factoryNumberTransmission', 'driveAxel', 'factoryNumberDriveAxel', 'steringAxel', 'factoryNumberSteringAxel')
+
+
+def get_machines_list_by_users_group(user=None):
     """ возвращает список машин в зависимости от прав пользователя"""
     context, data, titles = {}, [], []
-    print(type(user))
-    print(user)
-    if user.is_anonymous:
+    
+    if not user:
         data = Machine.objects.all().values('modelMachine', 'factoryNumberMachine', 'engine', 'factoryNumberEngine', 'transmission',
                                             'factoryNumberTransmission', 'driveAxel', 'factoryNumberDriveAxel', 'steringAxel', 'factoryNumberSteringAxel')
     elif user.groups.filter(name='Client').count():

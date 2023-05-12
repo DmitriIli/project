@@ -10,7 +10,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.authentication import SessionAuthentication
 from backend.serializers import UserSerilazer, LoginRequestSerializer
 from django.contrib.auth import authenticate, login, logout
-from .servises import get_machines_list_by_users_group
+from .servises import *
 # Create your views here.
 
 
@@ -140,8 +140,37 @@ def get_user(request: Request):
 @permission_classes([AllowAny])
 @authentication_classes([SessionAuthentication])
 def get_machines_by_users_group(request: Request):
-    
-    responce = get_machines_list_by_users_group(request.user)
+
+    if request.user.is_authenticated:
+        responce = get_machines_list_by_users_group(request.user)
+    else:
+        responce = get_machines_list_by_users_group()
+    return Response({
+        'responce': responce
+    })
+
+# @api_view()
+# @permission_classes([AllowAny])
+# @authentication_classes([SessionAuthentication])
+# def get_machines_by_users_group(request: Request):
+
+#     if request.user.is_authenticated:
+#         responce = get_machines_list_by_users_group(request.user)
+#     else:
+#         responce = get_machines_list_by_users_group()
+#     return Response({
+#         'responce': responce
+#     })
+
+
+@api_view()
+@permission_classes([AllowAny])
+@authentication_classes([SessionAuthentication])
+def return_user_name(request: Request):
+    if request.user.is_authenticated:
+        responce = return_user(request.user)
+    else:
+        responce = return_user()
     return Response({
         'responce': responce
     })
