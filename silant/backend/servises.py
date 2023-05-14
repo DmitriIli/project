@@ -1,6 +1,7 @@
 from .models import Machine
 from django.contrib.auth.models import User
 
+
 def get_titles(data):
     """Получить заголовки таблицы"""
     ls = [item for item in data[0].keys()]
@@ -60,23 +61,26 @@ def return_user(user=None):
 def get_machines_list_by_users_group(user=None):
     """ возвращает список машин в зависимости от прав пользователя"""
     context, data, titles = {}, [], []
-    
+
     if not user:
         data = Machine.objects.all().values('modelMachine', 'factoryNumberMachine', 'engine', 'factoryNumberEngine', 'transmission',
                                             'factoryNumberTransmission', 'driveAxel', 'factoryNumberDriveAxel', 'steringAxel', 'factoryNumberSteringAxel')
-    elif user.groups.filter(name='Client').count():
-        data = Machine.objects.filter(
-            client__clientuser__user=user).values()
 
-    elif user.groups.filter(name='ServiceCompany').count():
-        data = Machine.objects.filter(
-            serviceCompany__servicecompanyuser__user=user).values()
+    if user:
+        user_group = User.objects.get(username=user).groups.values()[0]['name']
+        if user.groups.filter(name='Client').count():
+            data = Machine.objects.filter(
+                client__clientuser__user=user).values()
 
-    elif user.groups.filter(name='Manager').count():
-        data = Machine.objects.all().values()
+        elif user.groups.filter(name='ServiceCompany').count():
+            data = Machine.objects.filter(
+                serviceCompany__servicecompanyuser__user=user).values()
 
-    else:
-        print(f'root')
+        elif user.groups.filter(name='Manager').count():
+            data = Machine.objects.all().values()
+
+        else:
+            print(f'root')
 
     ls = [item for item in data[0].keys()]
 
@@ -85,12 +89,3 @@ def get_machines_list_by_users_group(user=None):
 
     context = {'data': data, 'titles': titles}
     return context
-
-
-def get_titles(data):
-    """Получить заголовки таблицы"""
-    ls = [item for item in data[0].keys()]
-
-    titles = [Machine._meta.get_field(
-        f'{name}').verbose_name for name in ls]
-    return titles

@@ -6,6 +6,6 @@ urlpatterns = [
     path('', views.getlist),
     path('service/<str:item>/', views.machine, name='machine'),
     path('catalog/<str:param>/', views.catalog, name='catalog'),
-    path('api/get/', views.return_user_name, name='return_user'),
+    path('api/get/', views.get_machines_by_users_group, name='get_machines_by_users_group'),
     
 ]
