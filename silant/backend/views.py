@@ -120,21 +120,6 @@ def auth_logout(request: Request):
     return Response(status=200)
 
 
-@api_view()
-@permission_classes([AllowAny])
-@authentication_classes([SessionAuthentication])
-def get_user(request: Request):
-    data = {}
-    if request.user.is_authenticated:
-        data = {'status': 'authorizated'}
-
-    else:
-        data = {'status': 'dont\'t authorizated'}
-
-    return Response({
-        'data': data
-    })
-
 
 @api_view()
 @permission_classes([AllowAny])
@@ -145,32 +130,6 @@ def get_machines_by_users_group(request: Request):
         responce = get_machines_list_by_users_group(request.user)
     else:
         responce = get_machines_list_by_users_group()
-    return Response({
-        'responce': responce
-    })
-
-# @api_view()
-# @permission_classes([AllowAny])
-# @authentication_classes([SessionAuthentication])
-# def get_machines_by_users_group(request: Request):
-
-#     if request.user.is_authenticated:
-#         responce = get_machines_list_by_users_group(request.user)
-#     else:
-#         responce = get_machines_list_by_users_group()
-#     return Response({
-#         'responce': responce
-#     })
-
-
-@api_view()
-@permission_classes([AllowAny])
-@authentication_classes([SessionAuthentication])
-def return_user_name(request: Request):
-    if request.user.is_authenticated:
-        responce = return_user(request.user)
-    else:
-        responce = return_user()
     return Response({
         'responce': responce
     })
