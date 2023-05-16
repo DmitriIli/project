@@ -127,10 +127,21 @@ function App() {
     <div className="App">
 
       <div className='login-block'>
-          <InputComponent type='text' placeholder='Username'/>
-          <InputComponent type='password' placeholder='Password'/>
-          <ButtonComponent >Login</ButtonComponent>
-
+        <form>
+          <InputComponent 
+            value={form.userName}
+            onChange={e => setForm({ ...form, userName: e.target.value })}
+            type='text' 
+            placeholder='Username' 
+          />
+          <InputComponent 
+            value={form.password}
+            onChange={e => setForm({ ...form, password: e.target.value })}
+            type='password' 
+            placeholder='Password' 
+          />
+          <ButtonComponent onClick={submitHandler} >Login</ButtonComponent>
+        </form>
       </div>
 
       <button onClick={onload}>getUser</button>
