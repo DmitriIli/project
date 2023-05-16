@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
-import './App.css';
+import './styles/App.css';
+import InputComponent from './components/ui/InputComponent';
+import ButtonComponent from './components/ui/ButtonComponent';
 
 
 function getCookie(name) {
@@ -123,6 +125,14 @@ function App() {
 
   return (
     <div className="App">
+
+      <div className='login-block'>
+          <InputComponent type='text' placeholder='Username'/>
+          <InputComponent type='password' placeholder='Password'/>
+          <ButtonComponent >Login</ButtonComponent>
+
+      </div>
+
       <button onClick={onload}>getUser</button>
       {error ? <p>{error}</p> : null}
       {!isLoggedIn ?
