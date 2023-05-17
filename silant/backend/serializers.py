@@ -19,12 +19,16 @@ class MachineSerializerAny(serializers.ModelSerializer):
                   'factoryNumberDriveAxel', 'steringAxel', 'factoryNumberSteringAxel')
 
 
+# class UserSerilazer(ModelSerializer):
+#     class Meta:
+#         model = User
+#         fields = ['username', 'first_name',
+#                   'last_name', 'email', 'date_joined']
+
 class UserSerilazer(ModelSerializer):
     class Meta:
         model = User
-        fields = ['username', 'first_name',
-                  'last_name', 'email', 'date_joined']
-
+        fields = ['username',]
 
 class LoginRequestSerializer(Serializer):
     model = User

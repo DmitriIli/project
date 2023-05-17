@@ -16,7 +16,6 @@ const onload = e => {
     {
       headers: {
         'Content-Type': 'application/json;charset=utf-8',
-
       },
     }
   ).then(response => {
@@ -26,10 +25,10 @@ const onload = e => {
       throw Error(`Something went wrong: code ${response.status}`)
     }
   })
-
 }
 
 function App() {
+  const [user, setUser] = useState()
   const [isLoggedIn, setIsLoggedIn] = useState(true)
   const [loading, setLoading] = useState()
   const [form, setForm] = useState({ userName: '', password: '' })
@@ -38,34 +37,63 @@ function App() {
   const csrftoken = getCookie('csrftoken')
 
 
-  useEffect(() => {
-    if (isLoggedIn) {
-      fetch(
-        '/api/user/',
-        {
-          headers: {
-            'Content-Type': 'application/json;charset=utf-8',
+  // useEffect(() => {
+  //   if (isLoggedIn) {
+  //     fetch(
+  //       '/api/user/',
+  //       {
+  //         headers: {
+  //           'Content-Type': 'application/json;charset=utf-8',
 
-          },
+  //         },
+  //       }
+  //     )
+  //       .then(response => {
+  //         if (response.ok) {
+  //           return response.json()
+  //         } else {
+  //           throw Error(`Something went wrong: code ${response.status}`)
+  //         }
+  //       })
+  //       .then(({ data }) => {
+  //         setData({ firstName: data.first_name, lastName: data.last_name, userName: data.username, email: data.email, dateJoined: data.date_joined })
+  //         setError(null)
+  //       })
+  //       .catch(error => {
+  //         console.log(error)
+  //         setError('Ошибка, подробности в консоли')
+  //         setIsLoggedIn(false)
+  //       })
+  //   }
+  // }, [isLoggedIn])
+
+
+  useEffect(() => {
+    fetch(
+      '/api/get/',
+      {
+        headers: {
+          'Content-Type': 'application/json;charset=utf-8',
+        },
+      }
+    )
+      .then(response => {
+        if (response.ok) {
+          return response.json()
+        } else {
+          throw Error(`Something went wrong: code ${response.status}`)
         }
-      )
-        .then(response => {
-          if (response.ok) {
-            return response.json()
-          } else {
-            throw Error(`Something went wrong: code ${response.status}`)
-          }
-        })
-        .then(({ data }) => {
-          setData({ firstName: data.first_name, lastName: data.last_name, userName: data.username, email: data.email, dateJoined: data.date_joined })
-          setError(null)
-        })
-        .catch(error => {
-          console.log(error)
-          setError('Ошибка, подробности в консоли')
-          setIsLoggedIn(false)
-        })
-    }
+      })
+      .then(({ data }) => {
+        console.log(data)
+        setError(null)
+      })
+      .catch(error => {
+        console.log(error)
+        setError('Ошибка, подробности в консоли')
+        setIsLoggedIn(false)
+      })
+
   }, [isLoggedIn])
 
   const submitHandler = e => {
@@ -124,51 +152,44 @@ function App() {
 
 
   return (
-    <div className="App">
-
-      <div className='login-block'>
-        <form>
-          <InputComponent 
-            value={form.userName}
-            onChange={e => setForm({ ...form, userName: e.target.value })}
-            type='text' 
-            placeholder='Username' 
-          />
-          <InputComponent 
-            value={form.password}
-            onChange={e => setForm({ ...form, password: e.target.value })}
-            type='password' 
-            placeholder='Password' 
-          />
-          <ButtonComponent onClick={submitHandler} >Login</ButtonComponent>
-        </form>
-      </div>
-
-      <button onClick={onload}>getUser</button>
+    <div className="App" >
       {error ? <p>{error}</p> : null}
-      {!isLoggedIn ?
-        loading ? "Загрузка..." :
-          <form className="loginForm" onSubmit={submitHandler}>
-            <input type="text" name="username" value={form.userName} onChange={e => setForm({ ...form, userName: e.target.value })} placeholder="Username" />
-            <input type="password" name="password" value={form.password} onChange={e => setForm({ ...form, password: e.target.value })} placeholder="Password" />
-            <input type="submit" name="submit" value="Войти" />
-          </form>
-        :
-        !error ?
-          <div className="Profile">
-            <div>
-              <h1>{data.firstName} {data.lastName}</h1>
-              <h2>{data.userName}</h2>
-              <p>email: {data.email}</p>
-              <p>Профиль создан {data.dateJoined}</p>
+      {
+        !isLoggedIn
+          ?
+          loading ? "Загрузка..."
+            :
+            <div className='login-block'>
+              <form>
+                <InputComponent
+                  value={form.userName}
+                  onChange={e => setForm({ ...form, userName: e.target.value })}
+                  type='text'
+                  placeholder='Username'
+                />
+                <InputComponent
+                  value={form.password}
+                  onChange={e => setForm({ ...form, password: e.target.value })}
+                  type='password'
+                  placeholder='Password'
+                />
+                <ButtonComponent onClick={submitHandler}>Login</ButtonComponent>
+              </form>
             </div>
-            <div>
-              <button className='button' onClick={logoutHandler}>LogOut</button>
-            </div>
-          </div>
           :
-          null
+          !error ?
+            <div className="Profile">
+              <div>
+                <h2>{data.userName}</h2>
+              </div>
+              <div>
+                <button className='button' onClick={logoutHandler}>LogOut</button>
+              </div>
+            </div>
+            :
+            null
       }
+      <button onClick={onload}>getUser</button>
     </div>
   );
 }
