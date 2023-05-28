@@ -95,7 +95,7 @@ def auth_login(request: Request):
         authenticated_user = authenticate(**serializer.validated_data)
         if authenticated_user is not None:
             login(request, authenticated_user)
-            return Response({'status': 'Success'})
+            return Response({'status': 'Success', 'user': serializer.validated_data.get('username', '')})
         else:
             return Response({'error': 'Invalid credentials'}, status=403)
     else:
@@ -106,7 +106,6 @@ def auth_login(request: Request):
 @permission_classes([IsAuthenticated])
 @authentication_classes([SessionAuthentication])
 def user(request: Request):
-
     return Response({
         'data': UserSerilazer(request.user).data
     })
@@ -120,7 +119,6 @@ def auth_logout(request: Request):
     return Response(status=200)
 
 
-
 @api_view()
 @permission_classes([AllowAny])
 @authentication_classes([SessionAuthentication])
@@ -131,5 +129,5 @@ def get_machines_by_users_group(request: Request):
     else:
         responce = get_machines_list_by_users_group()
     return Response({
-        'responce': responce
+        'data': responce
     })

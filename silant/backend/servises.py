@@ -1,5 +1,7 @@
+import json
 from .models import Machine
 from django.contrib.auth.models import User
+from django.core import serializers
 from .serializers import UserSerilazer
 
 
@@ -8,7 +10,6 @@ def get_machines_list_by_users_group(user=None):
     context, data, titles = {}, [], []
 
     if not user:
-
         data = Machine.objects.all().values('modelMachine', 'factoryNumberMachine', 'engine', 'factoryNumberEngine', 'transmission',
                                             'factoryNumberTransmission', 'driveAxel', 'factoryNumberDriveAxel', 'steringAxel', 'factoryNumberSteringAxel')
         request_user = None
@@ -31,5 +32,7 @@ def get_machines_list_by_users_group(user=None):
     titles = [Machine._meta.get_field(
         f'{name}').verbose_name for name in ls]
 
-    context = {'data': data, 'titles': titles, 'user': request_user}
+
+    context = {'data': data, 'titles': titles}
+
     return context
