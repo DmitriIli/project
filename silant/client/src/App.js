@@ -82,7 +82,7 @@ function App() {
   }, [isLoggedIn])
 
   const logoutHandler = e => {
-    e.preventDefault();
+
     fetch('api/logout/',
       {
         method: 'POST',
@@ -91,7 +91,30 @@ function App() {
           'X-CSRFToken': csrftoken,
         },
       }
-    )
+    ).then(() => fetch('/api/get/',
+      {
+        headers: {
+          'Content-Type': 'application/json;charset=utf-8',
+        },
+      }
+    ).then(response => {
+      if (response.ok) {
+        return response.json()
+      } else {
+        throw Error(`Something went wrong: code ${response.status}`)
+      }
+    }
+    ).then(({ data }) => {
+      console.log(data.data[0])
+      console.log(data.titles)
+      setData(data)
+      setError(null)
+    }
+    ).catch(error => {
+      console.log(error)
+      setError('Ошибка, подробности в консоли')
+      setUser('')
+    }))
     setUser('')
     setIsLoggedIn(false)
     setAuthForm({ userName: '', password: '' })
@@ -135,10 +158,13 @@ function App() {
   }
   return (
     <div className="App">
+      <div className="header"> 
+      <h3>header</h3>
+      </div>
       {error ? <p>{error}</p> : null}
       {!user ?
         loading ? "Загрузка..." :
-          <form className="loginForm" onSubmit={submitHandler}>
+          <form className="login-form" onSubmit={submitHandler}>
             <input type="text" name="username" value={authForm.username} onChange={e => setAuthForm({ ...authForm, username: e.target.value })} placeholder="Username" />
             <input type="password" name="password" value={authForm.password} onChange={e => setAuthForm({ ...authForm, password: e.target.value })} placeholder="Password" />
             <input type="submit" name="submit" value="Войти" />
@@ -163,7 +189,7 @@ function App() {
         <div className='table-header'>
           <h3>заголовок</h3>
           <>
-            {data.titles.map((item) => 
+            {data.titles.map((item) =>
               <h3>{item}</h3>
             )}
           </>
