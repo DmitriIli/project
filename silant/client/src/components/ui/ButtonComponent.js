@@ -8,4 +8,4 @@ const ButtonComponent = ({children, ...props}) => {
   )
 }
 
-export default ButtonComponent
+export default ButtonComponent;

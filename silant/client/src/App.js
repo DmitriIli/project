@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import './styles/App.css';
-
-var arr = ['Яблоко', 'Банан'];
+import InputComponent from './components/ui/InputComponent';
+import ButtonComponent from './components/ui/ButtonComponent';
 
 
 function getCookie(name) {
@@ -18,7 +18,9 @@ function App() {
   const [userData, setUserData] = useState({ firstName: '', lastName: '', userName: '', email: '', dateJoined: '' })
   const [data, setData] = useState()
   const [error, setError] = useState()
-  const [user, setUser] = useState(' ')
+  const [gettDataError, setGetDataError] = useState()
+  const [authError, setAuthError] = useState()
+  const [user, setUser] = useState()
   const csrftoken = getCookie('csrftoken')
 
   useEffect(() => {
@@ -37,18 +39,16 @@ function App() {
       }
     }
     ).then(({ data }) => {
-      console.log(data.data[0])
-      console.log(data.titles)
       setData(data)
       setError(null)
     }
     ).catch(error => {
       console.log(error)
       setError('Ошибка, подробности в консоли')
-      setUser('')
+      setIsLoggedIn(false)
     }
     )
-  }, [user])
+  }, [isLoggedIn])
 
   useEffect(() => {
     if (isLoggedIn) {
@@ -105,8 +105,6 @@ function App() {
       }
     }
     ).then(({ data }) => {
-      console.log(data.data[0])
-      console.log(data.titles)
       setData(data)
       setError(null)
     }
@@ -115,7 +113,7 @@ function App() {
       setError('Ошибка, подробности в консоли')
       setUser('')
     }))
-    setUser('')
+    // setUser('')
     setIsLoggedIn(false)
     setAuthForm({ userName: '', password: '' })
   }
@@ -158,33 +156,32 @@ function App() {
   }
   return (
     <div className="App">
-      <div className="header"> 
-      <h3>header</h3>
+      <div className="header">
+        <div className='header-content'>
+          <div class="logo">
+            <a href="/">
+              <img src="logo.svg" width="60" height="60px" alt='logo' />
+            </a>
+          </div>
+          {!isLoggedIn
+            ? loading ? "Загрузка..." :
+              <form className='auth-form' onSubmit={submitHandler}>
+                <InputComponent name="username" placeholder="username" type="text" value={authForm.username} onChange={e => setAuthForm({ ...authForm, username: e.target.value })} />
+                <InputComponent name="password" placeholder="password" type="password" value={authForm.password} onChange={e => setAuthForm({ ...authForm, password: e.target.value })} />
+                <ButtonComponent>Войти</ButtonComponent>
+              </form>
+            : !error ?
+              <div>
+                <h3>{userData.username}</h3>
+                <ButtonComponent className="button" onClick={logoutHandler}> Выйти </ButtonComponent>
+              </div>
+              : null
+          }</div>
+
       </div>
       {error ? <p>{error}</p> : null}
-      {!user ?
-        loading ? "Загрузка..." :
-          <form className="login-form" onSubmit={submitHandler}>
-            <input type="text" name="username" value={authForm.username} onChange={e => setAuthForm({ ...authForm, username: e.target.value })} placeholder="Username" />
-            <input type="password" name="password" value={authForm.password} onChange={e => setAuthForm({ ...authForm, password: e.target.value })} placeholder="Password" />
-            <input type="submit" name="submit" value="Войти" />
-          </form>
-        :
-        !error ?
-          <div className="Profile">
-            <h1>1:{userData.firstName} {userData.lastName}</h1>
-            <h2>2:{userData.username}</h2>
-            <p>email: {userData.email}</p>
-            <p>Профиль создан {userData.dateJoined}</p>
-            <button className='button' onClick={logoutHandler}>logout</button>
-          </div>
-          :
-          null
-      }
-      {
-        user ? <h1>{user}</h1> : null
-      }
-      {data
+
+      {/* {data
         ?
         <div className='table-header'>
           <h3>заголовок</h3>
@@ -196,7 +193,7 @@ function App() {
 
         </div>
         : <h1>данные не загружены</h1>
-      }
+      } */}
     </div>
   )
 };
