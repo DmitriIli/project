@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
 
-const TableCell = ({ props }) => {
-  const [state, setState] = useState(props.item);
+const Cell = (props) => {
+  const [state, setState] = useState(props.data);
 
   return (
     <div className="table__cell">
-      <input
+      {/* {/* <input
         value={state}
         onChange={({ target }) => setState(target.value)}
-        type="text" />
+        type="text" /> */}
+        <p>{state}</p> */
+        {console.log(props.data)}
     </div>
   )
 }
 
-export default TableCell;
+export default Cell;

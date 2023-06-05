@@ -1,19 +1,15 @@
 import React, { useState } from 'react';
+import Cell from './Cell';
 
-const TableRow = ({starship}) => {
-    const {
-      cargo_capacity,
-      cost_in_credits,
-      max_atmosphering_speed,
-      name
-    } = starship
-  
-  
+const TableRow = (data) => {
     return (
-      <div className="table__row">
-        <TableCell item={cargo_capacity} />
-      </div>
+        <div className="table__row">
+            {data.data.map(item => {
+                <Cell data={item} key={item} />
+            })
+            }
+        </div>
     )
-  };
+};
 
-  export default TableRow;
+export default TableRow;

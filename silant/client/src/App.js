@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import './styles/App.css';
 import InputComponent from './components/ui/InputComponent';
 import ButtonComponent from './components/ui/ButtonComponent';
+import TableRow from './components/TableRow';
 
 
 function getCookie(name) {
@@ -177,23 +178,19 @@ function App() {
               </div>
               : null
           }</div>
-
       </div>
       {error ? <p>{error}</p> : null}
 
-      {/* {data
+      {data
         ?
         <div className='table-header'>
-          <h3>заголовок</h3>
-          <>
-            {data.titles.map((item) =>
-              <h3>{item}</h3>
-            )}
-          </>
-
+          {/* {data.titles.map((item) =>
+            <h3>{item}</h3>
+          )} */}
+          <TableRow data={data.titles} />
         </div>
         : <h1>данные не загружены</h1>
-      } */}
+      }
     </div>
   )
 };
