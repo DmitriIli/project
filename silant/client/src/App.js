@@ -3,7 +3,7 @@ import './styles/App.css';
 import InputComponent from './components/ui/InputComponent';
 import ButtonComponent from './components/ui/ButtonComponent';
 import TableRow from './components/TableRow';
-
+import TitleRow from './components/TitleRow';
 
 function getCookie(name) {
   const value = `; ${document.cookie}`;
@@ -183,12 +183,21 @@ function App() {
 
       {data
         ?
-        <div className='table-header'>
-          {/* {data.titles.map((item) =>
-            <h3>{item}</h3>
-          )} */}
-          <TableRow data={data.titles} />
+        <div className='table'>
+          <div className='table-header'>
+            <TitleRow data={data.titles} />
+          </div>
+          <div className='table-row'>
+            {
+              // console.log(Object.keys(data.data[0]))
+              data.data.map(row =>
+                <TableRow data={row} />
+              )
+            }
+          </div>
         </div>
+
+
         : <h1>данные не загружены</h1>
       }
     </div>

@@ -4,15 +4,13 @@ const Cell = (props) => {
   const [state, setState] = useState(props.data);
 
   return (
-    <div className="table__cell">
-      {/* {/* <input
+    <div className="table-cell">
+      {/* < input
         value={state}
         onChange={({ target }) => setState(target.value)}
         type="text" /> */}
-        <p>{state}</p> */
-        {console.log(props.data)}
+      <>{state}</>
     </div>
   )
 }
-
 export default Cell;
