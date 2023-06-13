@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import Cell from './Cell';
 
 
-const TableRow = (data) => {
+const TableRow = (props) => {
     return (
-        <div >
-            {Object.keys(data.data).map((item)=>{
+        <div className='table-row'>
+            {Object.keys(props.data).map((item)=>{
                 return(
                     <>
-                        {console.log(item)}
+                        <Cell data={props.data[item]} key={props.data[item]+Date.now()} />
                     </>
                 )
             })}

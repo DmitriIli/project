@@ -4,6 +4,7 @@ import InputComponent from './components/ui/InputComponent';
 import ButtonComponent from './components/ui/ButtonComponent';
 import TableRow from './components/TableRow';
 import TitleRow from './components/TitleRow';
+import SelectedComponent from './components/ui/SelectedComponents';
 
 function getCookie(name) {
   const value = `; ${document.cookie}`;
@@ -18,11 +19,17 @@ function App() {
   const [authForm, setAuthForm] = useState({ username: '', password: '' })
   const [userData, setUserData] = useState({ firstName: '', lastName: '', userName: '', email: '', dateJoined: '' })
   const [data, setData] = useState()
+  
+  const [sortedData, setSortedData] = useState([...data].sort((a,b)=>a['shipingDate'].localeCompare(b['shipingDate'])))
+  const [titles, setTitles] = useState()
   const [error, setError] = useState()
   const [gettDataError, setGetDataError] = useState()
   const [authError, setAuthError] = useState()
+   
   const [user, setUser] = useState()
   const csrftoken = getCookie('csrftoken')
+
+
 
   useEffect(() => {
     fetch(
@@ -40,8 +47,10 @@ function App() {
       }
     }
     ).then(({ data }) => {
-      setData(data)
+      setData(data.data)
+      setTitles(data.titles)
       setError(null)
+
     }
     ).catch(error => {
       console.log(error)
@@ -69,7 +78,6 @@ function App() {
           }
         })
         .then(({ data }) => {
-          console.log(data)
           setUserData({ firstName: data.first_name, lastName: data.last_name, username: data.username, email: data.email, dateJoined: data.date_joined })
           setError(null)
         })
@@ -106,7 +114,8 @@ function App() {
       }
     }
     ).then(({ data }) => {
-      setData(data)
+      setData(data.data)
+      setTitles(data.titles)
       setError(null)
     }
     ).catch(error => {
@@ -114,7 +123,6 @@ function App() {
       setError('Ошибка, подробности в консоли')
       setUser('')
     }))
-    // setUser('')
     setIsLoggedIn(false)
     setAuthForm({ userName: '', password: '' })
   }
@@ -155,11 +163,23 @@ function App() {
       .finally(setLoading(false))
 
   }
+
+  const sortMachines = (sort) => {
+    setSelectedSort(sort)
+    if (sort == 'eaelier'){
+      setSortedData([...data].sort((a,b)=>a['shipingDate'].localeCompare(b['shipingDate'])))
+    }
+    if (sort == 'later'){
+      setSortedData([...data].sort((a,b)=>b['shipingDate'].localeCompare(a['shipingDate'])))
+    }
+  }
+
+
   return (
     <div className="App">
       <div className="header">
         <div className='header-content'>
-          <div class="logo">
+          <div className="logo">
             <a href="/">
               <img src="logo.svg" width="60" height="60px" alt='logo' />
             </a>
@@ -183,21 +203,35 @@ function App() {
 
       {data
         ?
-        <div className='table'>
-          <div className='table-header'>
-            <TitleRow data={data.titles} />
+        <div className='body'>
+          <div className='sort-menu'>
+            <hr />
+            <SelectedComponent
+              value={selectedSort}
+              onChange={sortMachines}
+              defaultValue="Сортировка по..."
+              options={[
+                { value: 'earlier', name: 'По возрастанию' },
+                { value: 'later', name: 'По убыванию' },
+              ]}
+            />
+            <hr />
           </div>
-          <div className='table-row'>
-            {
-              // console.log(Object.keys(data.data[0]))
-              data.data.map(row =>
-                <TableRow data={row} />
-              )
-            }
+          <div className='table'>
+            <div className='table-header'>
+              <TitleRow data={titles} />
+            </div>
+            <div className='table-body'>
+              {sortedData.map((row) => {
+                return (
+                  <>
+                    <TableRow data={row} />
+                  </>
+                )
+              })}
+            </div>
           </div>
         </div>
-
-
         : <h1>данные не загружены</h1>
       }
     </div>

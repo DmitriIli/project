@@ -45,16 +45,33 @@
   justify-content: center;
 }
 
+.table-header {
+  display: flex;
+  align-content: space-around;
+  flex-wrap: wrap;
+  flex-direction: column;
+}
+
+.table-body {
+  display: flex;
+  align-content: space-around;
+  flex-wrap: wrap;
+  flex-direction: column;
+}
+
 .table-row {
   display: flex;
   justify-content: center;
 }
 
 .table-cell {
-  width: 120px;
-  /* white-space: nowrap; */ /* Запрещаем перенос строк */
-  overflow: hidden; /* Обрезаем все, что не помещается в область */
+  width: 110px;
+  /* white-space: nowrap; */
+  /* Запрещаем перенос строк */
+  overflow: hidden;
+  /* Обрезаем все, что не помещается в область */
   padding: 5px;
-  text-overflow: ellipsis; /* Добавляем многоточие */
+  text-overflow: ellipsis;
+  /* Добавляем многоточие */
 
 }
