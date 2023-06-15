@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import './styles/App.css';
-import InputComponent from './components/ui/InputComponent';
-import ButtonComponent from './components/ui/ButtonComponent';
-import TableRow from './components/TableRow';
-import TitleRow from './components/TitleRow';
-import SelectedComponent from './components/ui/SelectedComponents';
+import InputComponent from './components/ui/input/InputComponent';
+import ButtonComponent from './components/ui/button/ButtonComponent';
+import SelectedComponent from './components/ui/select/SelectedComponents';
+import Table from './components/Table';
+
 
 function getCookie(name) {
   const value = `; ${document.cookie}`;
@@ -12,23 +12,24 @@ function getCookie(name) {
   if (parts.length === 2) return parts.pop().split(';').shift();
 }
 
-
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(true)
   const [loading, setLoading] = useState()
   const [authForm, setAuthForm] = useState({ username: '', password: '' })
   const [userData, setUserData] = useState({ firstName: '', lastName: '', userName: '', email: '', dateJoined: '' })
   const [data, setData] = useState()
-  
-  const [sortedData, setSortedData] = useState([...data].sort((a,b)=>a['shipingDate'].localeCompare(b['shipingDate'])))
+  const [selectedSort, setSelectedSort] = useState('')
+  const [searchQuery, setSearchQuery] = useState('')
   const [titles, setTitles] = useState()
   const [error, setError] = useState()
-  const [gettDataError, setGetDataError] = useState()
-  const [authError, setAuthError] = useState()
-   
   const [user, setUser] = useState()
   const csrftoken = getCookie('csrftoken')
 
+
+  async function fetchData() { 
+    const responce = await axios.get('http://127.0.0.1:8000/api/get/')
+    console.log(responce.data)
+  }
 
 
   useEffect(() => {
@@ -166,14 +167,17 @@ function App() {
 
   const sortMachines = (sort) => {
     setSelectedSort(sort)
-    if (sort == 'eaelier'){
-      setSortedData([...data].sort((a,b)=>a['shipingDate'].localeCompare(b['shipingDate'])))
+    if (isLoggedIn) {
+      if (sort === 'earlier') {
+        setData([...data].sort((a, b) => a['shipingDate'].localeCompare(b['shipingDate'])))
+      }
+      if (sort === 'later') {
+        setData([...data].sort((a, b) => b['shipingDate'].localeCompare(a['shipingDate'])))
+      }
     }
-    if (sort == 'later'){
-      setSortedData([...data].sort((a,b)=>b['shipingDate'].localeCompare(a['shipingDate'])))
-    }
-  }
 
+
+  }
 
   return (
     <div className="App">
@@ -184,6 +188,7 @@ function App() {
               <img src="logo.svg" width="60" height="60px" alt='logo' />
             </a>
           </div>
+          <button onClick ='fetchData'> responce </button>
           {!isLoggedIn
             ? loading ? "Загрузка..." :
               <form className='auth-form' onSubmit={submitHandler}>
@@ -204,32 +209,28 @@ function App() {
       {data
         ?
         <div className='body'>
-          <div className='sort-menu'>
-            <hr />
-            <SelectedComponent
-              value={selectedSort}
-              onChange={sortMachines}
-              defaultValue="Сортировка по..."
-              options={[
-                { value: 'earlier', name: 'По возрастанию' },
-                { value: 'later', name: 'По убыванию' },
-              ]}
-            />
-            <hr />
-          </div>
+          {isLoggedIn
+            ? <div className='sort-menu'>
+              <hr />
+              <InputComponent
+                placeholder="Заводской номер машины..."
+                type="text"
+                value={searchQuery}
+                onChange={e => setSearchQuery(e.target.value)}
+              />
+              <SelectedComponent
+                value={selectedSort}
+                onChange={sortMachines}
+                defaultValue="Сортировка по дате..."
+                options={[
+                  { value: 'earlier', name: 'По возрастанию' },
+                  { value: 'later', name: 'По убыванию' },
+                ]}
+              />
+              <hr /> </div>
+            : null}
           <div className='table'>
-            <div className='table-header'>
-              <TitleRow data={titles} />
-            </div>
-            <div className='table-body'>
-              {sortedData.map((row) => {
-                return (
-                  <>
-                    <TableRow data={row} />
-                  </>
-                )
-              })}
-            </div>
+            <Table titles={titles} data={data} />
           </div>
         </div>
         : <h1>данные не загружены</h1>
