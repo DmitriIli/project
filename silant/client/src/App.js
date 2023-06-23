@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import './styles/App.css';
 import InputComponent from './components/ui/input/InputComponent';
 import ButtonComponent from './components/ui/button/ButtonComponent';
 import SelectedComponent from './components/ui/select/SelectedComponents';
 import Table from './components/Table';
-
+import axios from 'axios';
 
 function getCookie(name) {
   const value = `; ${document.cookie}`;
@@ -12,24 +12,20 @@ function getCookie(name) {
   if (parts.length === 2) return parts.pop().split(';').shift();
 }
 
+
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(true)
   const [loading, setLoading] = useState()
   const [authForm, setAuthForm] = useState({ username: '', password: '' })
   const [userData, setUserData] = useState({ firstName: '', lastName: '', userName: '', email: '', dateJoined: '' })
   const [data, setData] = useState()
-  const [selectedSort, setSelectedSort] = useState('')
+  const [sortedData, setSortedData] = useState()
+  const [selectedSort, setSelectedSort] = useState('earlier')
   const [searchQuery, setSearchQuery] = useState('')
   const [titles, setTitles] = useState()
   const [error, setError] = useState()
   const [user, setUser] = useState()
   const csrftoken = getCookie('csrftoken')
-
-
-  async function fetchData() { 
-    const responce = await axios.get('http://127.0.0.1:8000/api/get/')
-    console.log(responce.data)
-  }
 
 
   useEffect(() => {
@@ -162,10 +158,9 @@ function App() {
         setError('Ошибка, подробности в консоли')
       })
       .finally(setLoading(false))
-
   }
 
-  const sortMachines = (sort) => {
+  const sortData = (sort) => {
     setSelectedSort(sort)
     if (isLoggedIn) {
       if (sort === 'earlier') {
@@ -175,8 +170,33 @@ function App() {
         setData([...data].sort((a, b) => b['shipingDate'].localeCompare(a['shipingDate'])))
       }
     }
+    else {
+      setSortedData([...data])
+    }
+  }
 
 
+  const searchedData = useMemo(() => {
+    if (data) {
+      if (searchQuery) { console.log(([...data].filter(item => item.factoryNumberMachine.includes(searchQuery)))) }
+      // return [...data]
+      return null
+    }
+    return null
+  }, [searchQuery, data])
+
+
+  async function getData() {
+    const responce = await axios.get('http://localhost:3000/api/get');
+    // const responce = await axios.get('http://localhost:3000/api/get', {
+    //   withCredentials: false,
+    // }).then(responce => {
+    //   console.log(responce.headers['set-cookie']);
+    // }).catch(e => {
+    //   console.log(e)
+    // })
+    console.log(responce)
+    return responce
   }
 
   return (
@@ -188,7 +208,6 @@ function App() {
               <img src="logo.svg" width="60" height="60px" alt='logo' />
             </a>
           </div>
-          <button onClick ='fetchData'> responce </button>
           {!isLoggedIn
             ? loading ? "Загрузка..." :
               <form className='auth-form' onSubmit={submitHandler}>
@@ -209,26 +228,27 @@ function App() {
       {data
         ?
         <div className='body'>
-          {isLoggedIn
-            ? <div className='sort-menu'>
-              <hr />
-              <InputComponent
-                placeholder="Заводской номер машины..."
-                type="text"
-                value={searchQuery}
-                onChange={e => setSearchQuery(e.target.value)}
-              />
-              <SelectedComponent
+          <div className='sort-menu'>
+            <hr />
+            {isLoggedIn
+              ? <SelectedComponent
                 value={selectedSort}
-                onChange={sortMachines}
+                onChange={sortData}
                 defaultValue="Сортировка по дате..."
                 options={[
                   { value: 'earlier', name: 'По возрастанию' },
                   { value: 'later', name: 'По убыванию' },
                 ]}
-              />
-              <hr /> </div>
-            : null}
+              /> : null}
+            <InputComponent
+              placeholder="Заводской номер машины..."
+              type="text"
+              value={searchQuery}
+              onChange={e => setSearchQuery(e.target.value)}
+            />
+            <hr />
+          </div>
+          <button onClick={getData}>get</button>
           <div className='table'>
             <Table titles={titles} data={data} />
           </div>
